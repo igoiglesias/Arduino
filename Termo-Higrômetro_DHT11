@@ -1,0 +1,79 @@
+
+/*
+  Projeto: Termo-Higrômetro_DHT11
+  Versao : 0.1 beta
+
+  Código abaixo simula o funcionamento de um Termo-Higrômetro
+  O mesmo foi criado para apresentar o conceito básico
+  Como leitura de temperatura, humidade e calcular o ponto de orvalho
+  Ele retornar os valores utilizando o Serial Monitor da IDE do Arduino.
+  
+  E requerido utilizar junto com o Arduino o sensor DHT11
+  Onde o mesmo consegue fazer a leitura de temperatura e humidade do ambiente.
+
+  Coded by Igor Iglesias
+  http://www.igoriglesias.com
+  contato@igoriglesias.com
+  @IgorIglesias5
+*/
+
+#include <dht11.h>	//Adiciona a biblioteca DHT11
+
+dht11 DHT11;
+
+#define DHT11PIN 2	//Define o pino ligado ao sensor
+
+void setup()
+{
+  
+  Serial.begin(115200);	//Define a velocidade da conexão serial	
+  Serial.println("TERMO-HIGRÔMETRO COM DHT11");
+  Serial.print("Vesão da biblioteca: ");
+  Serial.println(DHT11LIB_VERSION);	//Exibe a versão da biblioteca usada	
+  Serial.println();
+
+}
+
+void loop()
+{
+
+  Serial.println("\n");
+  int chk = DHT11.read(DHT11PIN);	//Lê o estado do sensor	
+  Serial.print("Status do sensor: ");
+  
+  switch (chk)
+  {
+   case DHTLIB_OK:
+    Serial.println("Sensor OK");
+    break;
+   case DHTLIB_ERROR_CHECKSUM:
+    Serial.println("Erro de checagem");
+    break;
+   case DHTLIB_ERROR_TIMEOUT:
+    Serial.println("Tempo de checagem expirou");
+    break;
+   default:
+    Serial.println("Erro desconhecido");
+    break;
+  }
+
+  if (chk == DHTLIB_OK)	//Se o sensor estiver "OK"
+  {
+
+    float h = (DHT11.humidity);	//Guarda o valor da humidade na variavel "h"
+    float t = (DHT11.temperature);	//Guarda o valor da temperatura na variavel "t"	
+    float o = t - ((100 - h)/5);	//Calcula o valor do ponto de orvalho com base na temperatura e humidade lido anteriomente	
+    
+    Serial.print("Humidade (%): ");	//Exibe a humidade
+    Serial.println(h);
+    Serial.print("Temperatura (°C): ");	//Exibe a temperatura	
+    Serial.println(t);
+    Serial.print("Ponto de Orvalho (°C): ");	//Exibe o ponto de orvalho	
+    Serial.println(o);
+
+    delay(2000);	//Espera 2s e recomeça	
+    
+  }
+}
+
+//FIM
