@@ -1,9 +1,8 @@
-
 /*
   Projeto: Termo-Higrômetro_DHT11
   Versao : 0.1 beta
 
-  Código abaixo simula o funcionamento de um Termo-Higrômetro
+  Código abaixo exemolifica o funcionamento de um Termo-Higrômetro
   O mesmo foi criado para apresentar o conceito básico
   Como leitura de temperatura, humidade e calcular o ponto de orvalho
   Ele retornar os valores utilizando o Serial Monitor da IDE do Arduino.
