@@ -1,0 +1,90 @@
+/*
+  Projeto: Termo-Higrômetro_DHT11_DisplayNokia5110
+  Versao : 0.1 beta
+
+  Codigo abaixo simula o funcionamento de um Termo-Higrômetro
+  O mesmo foi criado para apresentar o conceito basico
+  Como leitura de temperatura, humidade e calcular o ponto de orvalho
+  Ele retornar os valores utilizando um display grafico Nokia 5110.
+  
+  E requerido utilizar junto com o Arduino o sensor DHT11
+  Onde o mesmo consegue fazer a leitura de temperatura e humidade do ambiente.
+
+  Coded by Igor Iglesias
+  http://www.igoriglesias.com
+  contato@igoriglesias.com
+  @IgorIglesias5
+*/
+
+#include <Adafruit_GFX.h>
+#include <Adafruit_PCD8544.h>
+
+#include <dht11.h>	//Adiciona a biblioteca DHT11
+
+Adafruit_PCD8544 display = Adafruit_PCD8544(8, 9, 10, 11, 12);
+
+dht11 DHT11;
+
+#define NUMFLAKES 10
+#define XPOS 0
+#define YPOS 1
+#define DELTAY 2
+
+//#define LOGO16_GLCD_HEIGHT 16
+//#define LOGO16_GLCD_WIDTH  16
+
+#define DHT11PIN 2	//Define o pino ligado ao sensor
+
+void setup()
+{
+  
+  display.begin();
+  
+  display.setContrast(50);
+  display.display();
+  delay(5000);
+  display.clearDisplay();
+  
+  display.setTextSize(1);
+  display.setTextColor(BLACK);
+  display.setCursor(0,0);
+  display.println("Termo-higrometro");
+  display.println("Vesao: ");
+  display.println("0.1 beta");
+  display.display();
+  delay(2000);
+  display.clearDisplay();
+  display.display();
+  
+}
+
+void loop()
+{
+
+  int chk = DHT11.read(DHT11PIN);	//Lê o estado do sensor	
+
+  if (chk == DHTLIB_OK)	//Se o sensor estiver "OK"
+  {
+
+    float h = (DHT11.humidity);	//Guarda o valor da humidade na variavel "h"
+    float t = (DHT11.temperature);	//Guarda o valor da temperatura na variavel "t"	
+    float o = t - ((100 - h)/5);	//Calcula o valor do ponto de orvalho com base na temperatura e humidade lido anteriomente	
+    
+    display.setTextSize(1);
+    display.setTextColor(BLACK);
+    display.setCursor(0,0);
+    display.println("Humidade (%):");
+    display.println(h);
+    display.println("Temp (C):");
+    display.println(t);
+    display.println("Orvalho (C):");
+    display.print(o);
+    display.display();
+    delay(2000);	//Espera e recomeça
+    display.clearDisplay();
+    display.display();	
+    
+  }
+}
+
+//FIM
